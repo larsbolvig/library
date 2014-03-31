@@ -1,0 +1,117 @@
+/* Margin and padding classes based on the grid */
+.padding { padding: $half-column-gutter!important; }
+.padding-medium { padding: $column-gutter!important; }
+.padding-large { padding: $double-column-gutter!important; }
+
+.margin-top { margin-top: $half-column-gutter!important;}
+.margin-right { margin-right: $half-column-gutter!important;}
+.margin-bottom { margin-bottom: $half-column-gutter!important;}
+.margin-left { margin-left: $half-column-gutter!important;}
+
+.padding-top { padding-top: $half-column-gutter!important;}
+.padding-right { padding-right: $half-column-gutter!important;}
+.padding-bottom { padding-bottom: $half-column-gutter!important;}
+.padding-left { padding-left: $half-column-gutter!important;}
+
+
+.margin-top-medium { margin-top: $column-gutter!important;}
+.margin-right-medium { margin-right: $column-gutter!important;}
+.margin-bottom-medium { margin-bottom: $column-gutter!important;}
+.margin-left-medium { margin-left: $column-gutter!important;}
+
+.padding-top-medium { padding-top: $column-gutter!important;}
+.padding-right-medium { padding-right: $column-gutter!important;}
+.padding-bottom-medium { padding-bottom: $column-gutter!important;}
+.padding-left-medium { padding-left: $column-gutter!important;}
+
+.margin-top-large { margin-top: $double-column-gutter!important;}
+.margin-right-large { margin-right: $double-column-gutter!important;}
+.margin-bottom-large { margin-bottom: $double-column-gutter!important;}
+.margin-left-large { margin-left: $double-column-gutter!important!important;}
+
+.padding-top-large { padding-top: $double-column-gutter!important;}
+.padding-right-large { padding-right: $double-column-gutter!important;}
+.padding-bottom-large { padding-bottom: $double-column-gutter!important;}
+.padding-left-large { padding-left: $double-column-gutter!important;}
+
+.padding-sides { padding: 0 $half-column-gutter!important; }
+.padding-medium-sides { padding: 0 $column-gutter!important; }
+.padding-large-sides { padding: 0 $double-column-gutter!important; }
+
+.padding-no-sides { padding: $half-column-gutter 0!important; }
+.padding-medium-no-sides { padding: $column-gutter 0!important; }
+.padding-large-no-sides { padding: $double-column-gutter 0!important; }
+
+.margin-sides { margin: 0 $half-column-gutter!important; }
+.margin-medium-sides { margin: 0 $column-gutter!important; }
+.margin-large-sides { margin: 0 $double-column-gutter!important; }
+
+.margin-no-sides { margin: $half-column-gutter 0!important; }
+.margin-medium-no-sides { margin: $column-gutter 0!important; }
+.margin-large-no-sides { margin: $double-column-gutter 0!important; }
+
+/* Margin and padding reset classes  */
+.padding-reset { padding: 0!important; }
+.margin-reset { margin: 0!important; }
+.margin-left-reset { margin-left: 0!important; }
+.margin-right-reset { margin-right: 0!important; }
+.margin-top-reset { margin-top: 0!important; }
+.margin-bottom-reset { margin-bottom: 0!important; }
+
+/* Color classes based on the color scheme */
+.bg-white { background: $bg-white; }
+.bg-gray { background: $bg-gray; }
+.bg-light-gray { background: $bg-light-gray; }
+.bg-dark-gray { background: $bg-dark-gray; }
+
+
+/* Font classes */
+.body-font { font-family: $body-font; }
+.normal-font { font-family: $normal-font; }
+.medium-font { font-family: $medium-font; }
+.bold-font { font-family: $bold-font; }
+
+/* Position classes */
+.p-relative { position: relative!important; }
+.p-absolute { position: absolute!important; }
+
+/* Element class for elements inside columns */
+.element { @extend .margin-bottom-medium; }
+
+
+/* Remove left-padding on columns inside rows */
+.left-collapse {
+  .columns {
+    padding-left: 0;
+    padding-right: $column-gutter;
+  }
+}
+
+/* Height and width classes */
+.h-inherit {
+	height: inherit;
+}
+.w-inherit {
+	width: inherit;
+}
+
+
+/* Display classes */
+.inline { display: inline; }
+.display-block { display: block; }
+
+
+/* Dividers classes */
+hr.section-divide {
+	color: #d2d2d2;
+	border-width: rem-calc(2) 0 0;
+	margin: 0.25rem 0 1.1875rem
+}
+
+.row.divide {
+	padding-bottom: $half-column-gutter;
+	border-bottom: 1px solid #929292;
+}
+
+
+

@@ -1,0 +1,269 @@
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+	text-transform: uppercase;
+	margin: 0;
+	padding: 0;
+	color: #373737;
+	font-family: $bold-font;
+}
+
+h2 {
+	line-height: em(29, 26);
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.row {
+	@include media-only(tablet) {
+	    max-width: rem-calc(800);
+	}
+	@include media-only(standard) {
+	    max-width: rem-calc(933);
+	}
+	@include media-only(large) {
+	    max-width: rem-calc(1400);
+	}
+}
+
+
+.button {
+	text-transform: uppercase;
+}
+
+button.reset {
+	padding: 0;
+	margin: 0;
+	background: none;
+	color: black;
+	font-size: rem-calc(12);
+	text-decoration: underline;
+}
+
+
+.page-top {
+	height: rem-calc(60);
+	background: #000;
+	border-top: rem-calc(3) solid #f25b00;
+}
+
+
+.big-nav-bar {
+	margin-top: rem-calc(25);
+	background: #f3f3f3;
+	margin-bottom: rem-calc(40);
+	i {
+		float: left;
+		font-size: rem-calc(56);
+		margin: 0 $column-gutter;
+		color: $bg-dark-gray;
+		@include media-only(phone) {
+			font-size: rem-calc(46);
+		}
+	}
+	a { color: $body-font-color; }
+}
+
+/* Style for line items displayed in table */
+table {
+	&.items {
+		th, td {
+			border-bottom: 1px solid $bg-darker-gray;
+			padding-top: $half-column-gutter;
+			padding-bottom: $half-column-gutter;
+		}
+		th { text-transform: uppercase; }
+	}
+	&.subtotal, &.grand-total {
+		width: 100%;
+		td { text-align: right; }
+	}
+	&.subtotal {
+		td { padding-bottom: $half-column-gutter; }
+	}
+	&.grand-total {
+		width: 100%;
+		font-size: rem-calc(18);
+		text-transform: uppercase;
+		font-family: $bold-font;
+	}
+}
+
+
+/* STYLES FOR RADIO BUTTONS AND CHECKBOXES */
+
+/*
+	Wrap styles for radio button and checkboxes in a media query
+	so that ie8 and below will not see the styles
+*/
+@media only screen {
+
+	.checkbox,
+	.radio {
+	    /* Enable absolute positioning of the hidden form controls */
+	    position:relative;
+	    /* Just a bit of space. */
+	    margin-bottom:0.5em;
+	    /*
+	    Match line-height to the height of the replacement image to ensure it
+	    doesn't get clipped
+	    */
+	    line-height:24px;
+	}
+	fieldset :last-child {
+	    margin-bottom:0;
+	}
+	/*
+	Position and hide the real checkboxes and radio buttons.
+	The inputs are made transparent instead of completely hidden to preserve
+	clickability in browsers that don't have clickable labels, like Safari for
+	iOS 5 and older.
+	*/
+	input[type="checkbox"],
+	input[type="radio"] {
+	    position:absolute;
+	    /* Match the image dimensions */
+	    width:23px;
+	    height:24px;
+	    /* Reset anything that could peek out or interfere with dimensions */
+	    overflow:hidden;
+	    margin:0;
+	    padding:0;
+	    border:0;
+	    outline:0;
+	    opacity:0;
+	}
+	/*
+	Insert a pseudo element inside each label and give it a background
+	image that will become the custom checkbox or radio button.
+	Using inline-block lets you use vertical-align to adjust it vertically
+	as needed.
+	*/
+	input[type="checkbox"] + label:before,
+	input[type="radio"] + label:before {
+	    display:inline-block;
+	    width:23px;
+	    height:24px;
+	    margin-right: rem-calc(8);
+	    background:url(/static/img/gui_sprite.png ) no-repeat;
+	    content:" ";
+	    vertical-align:top;
+	    margin-top: rem-calc(-3);
+	}
+	input[type="radio"] + label:before {
+		margin-top: rem-calc(-2);
+	}
+
+
+	/*
+	Position the background image differently depending on the state of each
+	checkbox and radio button.
+	*/
+	input[type="radio"]:focus + label:before {
+	    background-position: rem-calc(0) rem-calc(0);
+	}
+	input[type="radio"]:checked + label:before {
+	    background-position: rem-calc(-25) rem-calc(0);
+	}
+	input[type="radio"]:checked:focus + label:before {
+	    background-position: rem-calc(-25) rem-calc(0);
+	}
+
+
+	input[type="checkbox"] + label:before {
+	    background-position: rem-calc(-50) rem-calc(1);
+	}
+	input[type="checkbox"]:focus + label:before {
+	    background-position: rem-calc(-50) rem-calc(1);
+	}
+	input[type="checkbox"]:checked + label:before {
+	    background-position: rem-calc(-75) rem-calc(1);
+	}
+	input[type="checkbox"]:checked:focus + label:before {
+	    background-position: rem-calc(-75) rem-calc(1);
+	}
+
+	.checkout input.half-width {
+		width: rem-calc(240);
+		@include media-only(phone) {
+			width: 100%;
+		}
+	}
+	.checkbox input[type="checkbox"] + label,
+	.checkbox input[type="radio"] + label {
+		margin: 0;
+	}
+}
+
+/* RESPONSIVE TABLE STYLES */
+table.responsive {
+	width: 100%;
+	border-collapse: collapse;
+	td, th {
+	  text-align: right;
+	}
+
+	@include media-only(phone)  {
+		display: block;
+		/* Force table to not be like tables anymore */
+		thead, tbody, th, td, tr {
+			display: block;
+			width: 100%;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		tr {
+			border: 1px solid #ccc;
+			margin-bottom: $half-column-gutter;
+			&:nth-of-type(odd) {
+				background: #eee;
+			}
+		}
+
+		td, th {
+		  text-align: left;
+		}
+		td {
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee;
+			position: relative;
+			padding-left: 50%;
+		}
+
+		td:before {
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 9px;
+			left: 9px;
+			width: 45%;
+			padding-right: 10px;
+			white-space: nowrap;
+			content: attr(data-label);
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: rem-calc(14);
+		}
+
+		td:nth-of-type(1):before { content: "Product name"; }
+		td:nth-of-type(2):before { content: "Price"; }
+		td:nth-of-type(3):before { content: "Qty"; }
+		td:nth-of-type(4):before { content: "Subtotal"; }
+	}
+}
+
+

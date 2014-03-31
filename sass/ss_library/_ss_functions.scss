@@ -1,0 +1,10 @@
+/******************************************************************
+  FUNCTIONS
+******************************************************************/
+@function fluid($target, $context){
+  @return percentage( $target / $context );
+}
+
+@function em($target-px, $context) {
+  @return ($target-px / $context) * 1em;
+}

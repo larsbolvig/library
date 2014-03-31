@@ -1,0 +1,26 @@
+/******************************************************************
+  VARIABLES
+******************************************************************/
+/* GRID */
+$half-column-gutter: $column-gutter / 2;
+$double-column-gutter: $column-gutter * 2;
+
+
+/* COLORS */
+$bg-white: #ffffff;
+$bg-gray: #e6e6e6;
+$bg-light-gray: #f3f3f3;
+$bg-dark-gray: #cccccc;
+$bg-darker-gray: #a4a4a4;
+$button-hover-color: #f36b19;
+$blue: #0177c1;
+$black: #000000;
+$error-red: #FFB2B2;
+$success-green: #98DF98;
+
+
+/* FONTS */
+$body-font: 'Trebuchet MS', Helvetica, Arial, Verdana, sans-serif;
+$normal-font: 'HelveticaNeueW02-57Cn', Helvetica, Arial, Verdana, sans-serif;
+$medium-font: 'HelveticaNeueW02-67MdCn 694060', Helvetica, Arial, Verdana, sans-serif;
+$bold-font: 'HelveticaNeueW02-77BdCn 694066', Helvetica, Arial, Verdana, sans-serif;

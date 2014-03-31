@@ -1,0 +1,43 @@
+/******************************************************************
+  MIXINS
+******************************************************************/
+@mixin media-only($media) {
+  @if $media == phone {
+    @media #{$small-only} {
+      @content;
+    }
+  }@else if $media == tablet {
+    @media #{$medium-only} {
+      @content;
+    }
+  }@else if $media == standard {
+    @media #{$large-only} {
+      @content;
+    }
+  }@else if $media == large {
+    @media #{$xlarge-only} {
+      @content;
+    }
+  }
+}
+
+
+@mixin media-up($media) {
+  @if $media == phone {
+    @media #{$small-up} {
+      @content;
+    }
+  }@else if $media == tablet {
+    @media #{$medium-up} {
+      @content;
+    }
+  }@else if $media == standard {
+    @media #{$large-up} {
+      @content;
+    }
+  }@else if $media == large {
+    @media #{$xlarge-up} {
+      @content;
+    }
+  }
+}
