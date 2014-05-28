@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     awspublish = require('gulp-awspublish'),
     livereload = require('gulp-livereload'),
+    clean = require('gulp-clean'),
     bump = require('gulp-bump'),
     lr = require('tiny-lr'),
     server = lr(),
@@ -31,8 +32,16 @@ gulp.task('bump', function(){
 });
 
 
+gulp.task('clean', function() {
+ return gulp.src(['dist/css/*.css','dist/js/**/*.js'])
+ .pipe(clean());
+});
 
 gulp.task('publish', function() {
+gulp.task('clean-vendor-js', function() {
+ return gulp.src('dist/js/vendor-js/*.js')
+ .pipe(clean());
+});
 
   // create a new publisher
   var publisher = awspublish.create({ key: awsCreds.key,  secret: awsCreds.secret, bucket: awsCreds.bucket });
