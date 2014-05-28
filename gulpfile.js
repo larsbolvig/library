@@ -78,6 +78,18 @@ gulp.task('watch', function() {
 });
 
 
+gulp.task('publish-vendor-js', function () {
+  return gulp.src('js/vendor-js/*.js')
+    .pipe(rename({suffix: '.' + 'v'+libVersion}))
+    .pipe(gulp.dest('dist/js/vendor-js'));
+});
+
+gulp.task('publish-lib-js', function () {
+  return gulp.src('js/lib-js/*.js')
+    .pipe(rename({suffix: '.' + 'v'+libVersion}))
+    .pipe(gulp.dest('dist/js/lib-js'));
+});
+
 gulp.task('minify-css', function () {
   console.log(libVersion);
   return gulp.src('css/static-lib.css')
