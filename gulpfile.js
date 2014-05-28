@@ -14,8 +14,20 @@ var gulp = require('gulp'),
     awsCreds = require('./aws_credentials.json');
 
 
+// create a new publisher
+var publisher = awspublish.create({ key: awsCreds.key,  secret: awsCreds.secret, bucket: awsCreds.bucket });
+
+// define custom headers for files uploaded to S3
+var headers = {
+   'Cache-Control': 'max-age=315360000, no-transform, public'
+ };
+
+// Type of release: major|minor|patch|prerelease
+var releaseType = 'prerelease';
+
+
 gulp.task('styles', function() {
-  return gulp.src('sass/static-lib.scss')
+  return gulp.src('scss/static-lib.scss')
     .pipe(sass())
     .pipe(gulp.dest('css'))
     .pipe(livereload(server))
@@ -24,33 +36,26 @@ gulp.task('styles', function() {
 
 gulp.task('bump', function(){
   var options = {
-    type: 'prerelease'
+    type: releaseType
   };
   gulp.src('./package.json')
   .pipe(bump(options))
   .pipe(gulp.dest('./'));
 });
 
-
+// CLEANING TASKS
 gulp.task('clean', function() {
  return gulp.src(['dist/css/*.css','dist/js/**/*.js'])
  .pipe(clean());
 });
 
-gulp.task('publish', function() {
 gulp.task('clean-vendor-js', function() {
  return gulp.src('dist/js/vendor-js/*.js')
  .pipe(clean());
 });
 
-  // create a new publisher
-  var publisher = awspublish.create({ key: awsCreds.key,  secret: awsCreds.secret, bucket: awsCreds.bucket });
 
-  // define custom headers
-  var headers = {
-     'Cache-Control': 'max-age=315360000, no-transform, public'
-     // ...
-   };
+gulp.task('publish', function() {
 
   return gulp.src('dist/*.css')
 
@@ -73,7 +78,7 @@ gulp.task('clean-vendor-js', function() {
 gulp.task('watch', function() {
 
   // Watch .scss files
-  gulp.watch('sass/**/*.scss', ['styles']);
+  gulp.watch('scss/**/*.scss', ['styles']);
 
 });
 
@@ -93,10 +98,10 @@ gulp.task('publish-lib-js', function () {
 gulp.task('minify-css', function () {
   console.log(libVersion);
   return gulp.src('css/static-lib.css')
-    .pipe(rename({suffix: '.' + libVersion}))
+    .pipe(rename({suffix: '.' + 'v'+libVersion}))
     .pipe(minifycss())
     .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('deploy', function(callback) {
