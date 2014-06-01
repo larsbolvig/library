@@ -43,8 +43,14 @@ gulp.task('gitPush', function(){
   git.push('origin', 'master');
 });
 
+// Tag the repo with a version
+gulp.task('tag', function(){
+  git.tag('v'+libVersion, 'Version message');
+});
 
-gulp.task('push-tag', function(){
+
+
+gulp.task('push-tag', ['tag'], function(){
   git.push('origin', 'v'+libVersion);
 });
 
@@ -179,7 +185,6 @@ gulp.task('deploy', function() {
     'minify-css',
     'publish-vendor-js',
     'publish-lib-js',
-    //'gitPush',
     'push-tag',
     'upload');
 });
