@@ -38,15 +38,16 @@ gulp.task('styles', function() {
     .pipe(notify({ message: 'Styles task complete' }));
 });
 
-// Tag the repo with a version
-gulp.task('gitTag', function(){
-  var libVersion = "0.0.1";
-  git.tag('v'+libVersion, 'Was released');
-});
 
 gulp.task('gitPush', function(){
-  git.push('origin', 'master').end();
+  git.push('origin', 'master');
 });
+
+
+gulp.task('push-tag', function(){
+  git.push('origin', 'v'+libVersion);
+});
+
 
 gulp.task('set-version-number', function () {
   jsonData = fs.readFileSync(path.join(__dirname, 'package.json'));
@@ -178,6 +179,8 @@ gulp.task('deploy', function() {
     'minify-css',
     'publish-vendor-js',
     'publish-lib-js',
+    'gitPush',
+    'push-tag',
     'upload');
 });
 
