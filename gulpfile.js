@@ -8,10 +8,14 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     clean = require('gulp-clean'),
     bump = require('gulp-bump'),
+    git = require('gulp-git'),
+    es = require('event-stream'),
     lr = require('tiny-lr'),
+    fs = require('fs'),
+    path = require('path'),
     server = lr(),
-    libVersion = require('./package.json').version,
-    awsCreds = require('./aws_credentials.json');
+    awsCreds = require('./aws_credentials.json'),
+    libVersion, jsonData, pkg;
 
 
 // create a new publisher
@@ -34,49 +38,108 @@ gulp.task('styles', function() {
     .pipe(notify({ message: 'Styles task complete' }));
 });
 
+// Tag the repo with a version
+gulp.task('gitTag', function(){
+  var libVersion = "0.0.1";
+  git.tag('v'+libVersion, 'Was released');
+});
+
+gulp.task('gitPush', function(){
+  git.push('origin', 'master').end();
+});
+
+gulp.task('set-version-number', function () {
+  jsonData = fs.readFileSync(path.join(__dirname, 'package.json'));
+  pgk = JSON.parse(jsonData);
+  libVersion = pgk.version;
+});
+
+
 gulp.task('bump', function(){
   var options = {
     type: releaseType
   };
-  gulp.src('./package.json')
+  return gulp.src('./package.json')
   .pipe(bump(options))
   .pipe(gulp.dest('./'));
 });
 
+
+gulp.task('connectionTest', function () {
+  return gulp.src('dist/img/DK.png')
+    .pipe(publisher.publish(headers))
+    .on('error', function () {
+      console.log("Couldn't connect to Amazon S3. Please check your AWS credentials.");
+    });
+
+});
+
+
 // CLEANING TASKS
 gulp.task('clean', function() {
- return gulp.src(['dist/css/*.css','dist/js/**/*.js'])
- .pipe(clean());
+  return gulp.src(['dist/css/*.css','dist/js/**/*.js'])
+    .pipe(clean());
 });
+
 
 gulp.task('clean-vendor-js', function() {
- return gulp.src('dist/js/vendor-js/*.js')
- .pipe(clean());
+  return gulp.src('dist/js/vendor-js/*.js')
+    .pipe(clean());
 });
 
 
-gulp.task('publish', function() {
+gulp.task('upload', function() {
 
-  return gulp.src('dist/*.css')
+  // globs for txt and bin files
+  var txtFiles = 'dist/**/*.{js,css,svg}';
+  var picFiles = 'dist/**/*.{png,jpg,jpeg}';
 
-     // gzip, Set Content-Encoding headers and add .gz extension
-    .pipe(awspublish.gzip({ ext: '.gz' }))
+  // gzip text files stream
+  var gzStream = gulp
+    .src(txtFiles)
+    .pipe(awspublish.gzip({ ext: '' }));
 
-    // publisher will add Content-Length, Content-Type and  headers specified above
-    // If not specified it will set x-amz-acl to public-read by default
+  // picture stream
+  var picStream = gulp
+    .src(picFiles);
+
+  return es.merge(gzStream, picStream)
     .pipe(publisher.publish(headers))
-
-    // create a cache file to speed up consecutive uploads
+    .pipe(publisher.sync())
     .pipe(publisher.cache())
+    .pipe(awspublish.reporter({
+      states: ['create', 'update', 'delete']
+    }));
+});
 
-     // print upload updates to console
-    .pipe(awspublish.reporter())
-    .pipe(notify({ message: 'Static lib was successfully deployed to S3' }));
+
+gulp.task('upload-vendor-js', function() {
+
+  // globs for txt and bin files
+  var txtFiles = 'dist/**/*.{js,css,svg}';
+  var picFiles = 'dist/**/*.{png,jpg,jpeg}';
+
+  // gzip text files stream
+  var gzStream = gulp
+    .src(txtFiles)
+    .pipe(awspublish.gzip({ ext: '' }));
+
+  // picture stream
+  var picStream = gulp
+    .src(picFiles);
+
+  return es.merge(gzStream, picStream)
+    .pipe(publisher.publish(headers))
+    .pipe(publisher.sync()) /* carfefull!! */
+    .pipe(publisher.cache())
+    .pipe(awspublish.reporter({
+      states: ['create', 'update', 'delete']
+    }))
+    .pipe(notify({ message: 'Vendor js uploaded successfully to S3.' }));
 });
 
 
 gulp.task('watch', function() {
-
   // Watch .scss files
   gulp.watch('scss/**/*.scss', ['styles']);
 
@@ -89,14 +152,15 @@ gulp.task('publish-vendor-js', function () {
     .pipe(gulp.dest('dist/js/vendor-js'));
 });
 
+
 gulp.task('publish-lib-js', function () {
   return gulp.src('js/lib-js/*.js')
     .pipe(rename({suffix: '.' + 'v'+libVersion}))
     .pipe(gulp.dest('dist/js/lib-js'));
 });
 
+
 gulp.task('minify-css', function () {
-  console.log(libVersion);
   return gulp.src('css/static-lib.css')
     .pipe(rename({suffix: '.' + 'v'+libVersion}))
     .pipe(minifycss())
@@ -104,8 +168,26 @@ gulp.task('minify-css', function () {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('deploy', function(callback) {
-  runSequence('bump', 'minify-css', 'publish');
+
+gulp.task('deploy', function() {
+  runSequence(
+    'connectionTest',
+    'bump',
+    'set-version-number',
+    'clean',
+    'minify-css',
+    'publish-vendor-js',
+    'publish-lib-js',
+    'upload');
+});
+
+
+gulp.task('deploy-vendor-js', function() {
+  runSequence(
+    'connectionTest',
+    'clean-vendor-js',
+    'publish-vendor-js',
+    'upload-vendor-js');
 });
 
 
