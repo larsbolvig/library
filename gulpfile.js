@@ -44,11 +44,10 @@ gulp.task('gitPush', function(){
   git.push('origin', 'master');
 });
 
-// Tag the repo with a version
+// Tag the repo with a new version of Staticlib
 gulp.task('tag', function(){
-  git.tag('v'+libVersion, 'Version message');
+  git.tag('v'+libVersion, 'New Staticlib release');
 });
-
 
 
 gulp.task('push-tag', ['tag'], function(){
