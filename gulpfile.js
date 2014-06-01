@@ -179,7 +179,7 @@ gulp.task('deploy', function() {
     'minify-css',
     'publish-vendor-js',
     'publish-lib-js',
-    'gitPush',
+    //'gitPush',
     'push-tag',
     'upload');
 });
