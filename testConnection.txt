@@ -1,0 +1,2 @@
+This file is only for testing that the connection from local machine to Amazons S3 bucket,
+is okay before bumping version and number and trying to deploy.
