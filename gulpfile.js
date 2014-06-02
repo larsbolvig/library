@@ -107,12 +107,11 @@ gulp.task('upload', function() {
     .pipe(awspublish.gzip({ ext: '' }));
 
   // picture stream
-  var picStream = gulp
-    .src(picFiles);
+  var picStream = gulp.src(picFiles);
 
   return es.merge(gzStream, picStream)
     .pipe(publisher.publish(headers))
-    .pipe(publisher.sync())
+    //.pipe(publisher.sync())
     .pipe(publisher.cache())
     .pipe(awspublish.reporter({
       states: ['create', 'update', 'delete']
@@ -124,25 +123,14 @@ gulp.task('upload-vendor-js', function() {
 
   // globs for txt and bin files
   var txtFiles = 'dist/**/*.{js,css,svg}';
-  var picFiles = 'dist/**/*.{png,jpg,jpeg}';
 
-  // gzip text files stream
-  var gzStream = gulp
-    .src(txtFiles)
-    .pipe(awspublish.gzip({ ext: '' }));
-
-  // picture stream
-  var picStream = gulp
-    .src(picFiles);
-
-  return es.merge(gzStream, picStream)
+  return gulp.src(txtFiles)
+    .pipe(awspublish.gzip({ ext: '' }))
     .pipe(publisher.publish(headers))
-    .pipe(publisher.sync()) /* carfefull!! */
     .pipe(publisher.cache())
     .pipe(awspublish.reporter({
       states: ['create', 'update', 'delete']
-    }))
-    .pipe(notify({ message: 'Vendor js uploaded successfully to S3.' }));
+    }));
 });
 
 
@@ -183,9 +171,9 @@ gulp.task('deploy', function() {
     'set-version-number',
     'clean',
     'minify-css',
+    'push-tag',
     'publish-vendor-js',
     'publish-lib-js',
-    'push-tag',
     'upload');
 });
 
@@ -193,6 +181,7 @@ gulp.task('deploy', function() {
 gulp.task('deploy-vendor-js', function() {
   runSequence(
     'connectionTest',
+    'set-version-number',
     'clean-vendor-js',
     'publish-vendor-js',
     'upload-vendor-js');
